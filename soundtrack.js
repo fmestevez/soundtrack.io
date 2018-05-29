@@ -232,7 +232,7 @@ function authorize(role) {
     case 'host':
       return function( req, res, next ) {
         if (~req.user.roles.indexOf('admin')) return next();
-        
+
         // TODO: fix this upstream
         if (!app.rooms[ req.room ]._owner._id && app.rooms[ req.room ]._owner) {
           app.rooms[ req.room ]._owner = {
@@ -774,7 +774,7 @@ app.post('/chat', requireLogin, function(req, res) {
   });
 });
 
-app.del('/playlist/:trackID', requireLogin, requireRoom , authorize('host'), function(req, res, next) {
+app.delete('/playlist/:trackID', requireLogin, requireRoom , authorize('host'), function(req, res, next) {
   if (!req.param('index') || req.param('index') == 0) { return next(); }
 
   var room = app.rooms[ req.room ];
@@ -970,7 +970,7 @@ app.patch('/rooms/:roomSlug', requireLogin, function(req, res, next) {
     if (err || !room) return next();
     if (!room._owner) return next();
     if (room._owner.toString() !== req.user._id.toString()) return next();
-    
+
     room.description = req.param('description');
     room.save(function(err) {
       res.send(room);
@@ -988,12 +988,12 @@ app.post('/tracks/:trackID',                  authorize('editor') , soundtracker
 app.patch('/tracks/:trackID', requireLogin, requireRoom , authorize('host') , soundtracker , tracks.ban);
 
 app.get('/:artistSlug',  redirectToMainSite , soundtracker , artists.view);
-app.del('/:artistSlug', soundtracker , authorize('admin') , artists.delete);
+app.delete('/:artistSlug', soundtracker , authorize('admin') , artists.delete);
 app.put('/:artistSlug', soundtracker , authorize('editor') , artists.edit);
 app.post('/:artistSlug', soundtracker , authorize('editor') , artists.edit);
 
-app.del('/playlists/:playlistID/:index', playlists.removeTrackFromPlaylist);
-app.del('/playlists/:playlistID', playlists.delete);
+app.delete('/playlists/:playlistID/:index', playlists.removeTrackFromPlaylist);
+app.delete('/playlists/:playlistID', playlists.delete);
 app.get('/:usernameSlug/sets/new',  redirectToMainSite , playlists.createForm);
 app.get('/:usernameSlug/sets',  redirectToMainSite , playlists.listPerson);
 app.get('/:usernameSlug/playlists/new', redirectToMainSite , playlists.createForm);
@@ -1030,7 +1030,7 @@ function getTop100FromCodingSoundtrack(done) {
   });
 }
 
-app.redis = redis.createClient();
+app.redis = redis.createClient( config.redis.port, config.redis.host );
 app.redis.on('error', function(err) {
   console.error("Error connecting to redis", err);
 });

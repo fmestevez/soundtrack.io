@@ -1,7 +1,7 @@
 var config = require('./config')
   , mongoose = require('mongoose')
   , redis = require('redis')
-  , client = redis.createClient();
+  , client = redis.createClient( config.redis.port, config.redis.host );
 
 var hosts = config.database.hosts || [];
 var string = 'mongodb://' + hosts.join(',') + '/' + config.database.name;

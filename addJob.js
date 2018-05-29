@@ -1,7 +1,8 @@
 var config = require('./config');
+var hosts = config.database.hosts || [];
 
 var Monq = require('monq');
-var monq = Monq('mongodb://localhost:27017/' + config.database.name );
+var monq = Monq('mongodb://' + hosts.join(',') + ':27017/' + config.database.name );
 var jobs = monq.queue( config.database.name );
 
 /**/jobs.enqueue('artist:update', { id: '52166226a1d626d547000338' } , function(err, job) {

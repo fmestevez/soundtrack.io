@@ -14,4 +14,6 @@ results
 npm-debug.log
 config.js
 
-config.js
+.idea
+node_modules
+package-lock.json

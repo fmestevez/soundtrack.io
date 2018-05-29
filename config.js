@@ -7,7 +7,7 @@ module.exports = {
   },
   database: {
       name: process.env.SOUNDTRACK_DB_NAME || 'soundtrack'
-    , hosts: ['localhost']
+    , hosts: [process.env.SOUNDTRACK_DB_HOST || 'localhost']
   },
   redis: {
       host: process.env.SOUNDTRACK_REDIS_HOST || 'localhost'
@@ -32,4 +32,4 @@ module.exports = {
     id: process.env.SOUNDTRACK_SPOTIFY_ID || 'id here',
     secret: process.env.SOUNDTRACK_SPOTIFY_SECRET || 'secret here'
   }
-}
+};
